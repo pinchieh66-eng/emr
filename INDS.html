@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2f80ed">
+<title>MedPocket · 多國語言隨身健康紀錄</title>
+<style>
+:root{
+  --blue-950:#12345b; --blue-900:#164a7a; --blue-800:#1d64a3; --blue-700:#2f80ed;
+  --blue-600:#4da3ff; --blue-500:#72c3ff; --blue-200:#cfeeff; --blue-100:#eaf7ff;
+  --blue-50:#f5fbff; --ink:#18324b; --muted:#688096; --white:#fff;
+  --border:#d9eaf6; --danger:#d9534f; --success:#218b62;
+  --shadow:0 20px 50px rgba(27,94,145,.12);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",
+  "Noto Sans TC","Noto Sans JP","Noto Sans KR",Arial,sans-serif;
+  color:var(--ink); background:
+  radial-gradient(circle at 8% 0%,#dff4ff 0,transparent 30%),
+  radial-gradient(circle at 92% 10%,#dcecff 0,transparent 28%),
+  linear-gradient(180deg,#f7fcff 0%,#eef8ff 100%);
+  min-height:100vh;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.app{max-width:1240px;margin:auto;padding:24px}
+.topbar{
+  position:sticky;top:14px;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;padding:14px 18px;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(18px);
+  border:1px solid rgba(217,234,246,.95);border-radius:18px;box-shadow:var(--shadow);
+}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800}
+.logo{
+  width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+  color:white;background:linear-gradient(145deg,#65c9ff,#2f80ed);
+  box-shadow:0 9px 20px rgba(47,128,237,.25);font-size:22px;
+}
+.brand small{display:block;color:var(--muted);font-weight:600;font-size:11px;margin-top:2px}
+.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.select-wrap{position:relative}
+select,.btn{
+  border:1px solid var(--border);background:white;color:var(--ink);
+  border-radius:12px;padding:10px 13px;outline:none;transition:.2s;
+}
+select:focus,.btn:focus,input:focus,textarea:focus{box-shadow:0 0 0 4px rgba(77,163,255,.17);border-color:var(--blue-600)}
+.btn{font-weight:700}
+.btn.primary{background:linear-gradient(135deg,#4ea8ff,#2f80ed);color:white;border-color:transparent}
+.btn.ghost{background:var(--blue-50)}
+.btn.danger{color:var(--danger)}
+.hero{
+  margin:28px 0 20px;padding:34px;border-radius:30px;overflow:hidden;position:relative;
+  background:linear-gradient(135deg,#eaf8ff 0%,#fff 52%,#dff1ff 100%);
+  border:1px solid #d4ebfa;box-shadow:var(--shadow);
+}
+.hero:after{
+  content:"";position:absolute;width:260px;height:260px;border-radius:50%;
+  right:-80px;top:-100px;background:rgba(77,163,255,.12);
+}
+.hero h1{margin:0 0 9px;font-size:clamp(28px,4vw,46px);letter-spacing:-1.5px}
+.hero p{margin:0;max-width:720px;color:var(--muted);line-height:1.7}
+.notice{
+  margin-top:18px;padding:12px 14px;border-radius:14px;background:#fff;
+  border:1px solid #dbeefa;color:#5d7385;font-size:13px;
+}
+.layout{display:grid;grid-template-columns:250px 1fr;gap:20px}
+.nav{
+  position:sticky;top:96px;align-self:start;padding:12px;background:rgba(255,255,255,.82);
+  border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow)
+}
+.nav button{
+  width:100%;text-align:left;border:0;background:transparent;padding:12px 13px;
+  color:#648097;border-radius:12px;font-weight:700;margin-bottom:4px
+}
+.nav button.active,.nav button:hover{background:var(--blue-100);color:var(--blue-900)}
+.card{
+  background:rgba(255,255,255,.92);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:24px;margin-bottom:18px
+}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px}
+.card h2{margin:0;font-size:21px}.card-head p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+label{font-size:13px;font-weight:800;color:#45647d}
+input,textarea{
+  width:100%;border:1px solid var(--border);background:#fbfdff;color:var(--ink);
+  border-radius:13px;padding:12px 13px;outline:none;transition:.2s
+}
+textarea{min-height:108px;resize:vertical;line-height:1.6}
+.section-tag{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;
+  background:var(--blue-100);color:var(--blue-900);font-size:12px;font-weight:800;margin-bottom:12px
+}
+.actions{
+  position:sticky;bottom:15px;z-index:10;display:flex;justify-content:flex-end;gap:9px;
+  padding:12px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);
+  border:1px solid var(--border);border-radius:17px;box-shadow:var(--shadow)
+}
+.toast{
+  position:fixed;right:22px;bottom:22px;z-index:50;background:#173b5e;color:white;
+  padding:12px 16px;border-radius:12px;box-shadow:0 14px 30px rgba(15,57,91,.25);
+  transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s
+}
+.toast.show{transform:translateY(0);opacity:1}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .nav{position:static;display:flex;overflow:auto;gap:5px}
+  .nav button{min-width:max-content;width:auto;margin:0}
+}
+@media(max-width:650px){
+  .app{padding:12px}.topbar{top:7px;padding:10px}.hero{padding:24px}
+  .grid,.grid.three{grid-template-columns:1fr}.card{padding:18px}
+  .toolbar .btn{padding:9px}.brand small{display:none}
+}
+@media print{
+  body{background:white}.topbar,.nav,.actions,.notice{display:none!important}
+  .app{max-width:none;padding:0}.hero{box-shadow:none;margin:0 0 15px}
+  .card{box-shadow:none;break-inside:avoid}.layout{display:block}
+}
+:lang(ja){font-family:Inter,ui-sans-serif,system-ui,"Noto Sans JP","Yu Gothic",sans-serif}
+:lang(ko){font-family:Inter,ui-sans-serif,system-ui,"Noto Sans KR","Malgun Gothic",sans-serif}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">✚</div>
+      <div>MedPocket<small data-i18n="brandSub">隨身多國語言健康紀錄</small></div>
+    </div>
+    <div class="toolbar">
+      <select id="language" aria-label="Language">
+        <option value="zh-TW">繁體中文</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="vi">Tiếng Việt</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+      </select>
+      <button class="btn ghost" id="printBtn" data-i18n="print">列印</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="section-tag">● <span data-i18n="offline">OFFLINE · LOCAL</span></div>
+    <h1 data-i18n="title">我的隨身健康紀錄</h1>
+    <p data-i18n="subtitle">把重要的個人史、疾病史、手術史、用藥與家族史集中整理，方便在就醫或旅行時快速提供醫療資訊。</p>
+    <div class="notice" data-i18n="privacy">
+      隱私提醒：本頁面是純前端靜態工具，資料只儲存在目前瀏覽器的 LocalStorage。請勿把它當成正式醫療系統或雲端備份；若裝置與帳號共用，請特別注意隱私。
+    </div>
+  </section>
+
+  <div class="layout">
+    <aside class="nav" id="nav">
+      <button class="active" data-target="personal" data-i18n="navPersonal">👤 個人資料</button>
+      <button data-target="history" data-i18n="navHistory">🩺 疾病史</button>
+      <button data-target="family" data-i18n="navFamily">👨‍👩‍👧 家族史</button>
+      <button data-target="surgery" data-i18n="navSurgery">🏥 手術／住院</button>
+      <button data-target="meds" data-i18n="navMeds">💊 用藥／過敏</button>
+      <button data-target="vaccine" data-i18n="navVaccine">💉 疫苗／預防</button>
+      <button data-target="other" data-i18n="navOther">📌 其他重要資訊</button>
+    </aside>
+
+    <main>
+      <form id="recordForm" autocomplete="off">
+        <section class="card section" id="personal">
+          <div class="card-head"><div><h2 data-i18n="personalTitle">個人資料</h2><p data-i18n="personalDesc">建立一份容易交給醫療人員閱讀的基本資料。</p></div></div>
+          <div class="grid three">
+            <div class="field"><label data-i18n="name">姓名</label><input name="name" data-ph="namePh"></div>
+            <div class="field"><label data-i18n="dob">出生日期</label><input type="date" name="dob"></div>
+            <div class="field"><label data-i18n="blood">血型</label><input name="blood" data-ph="bloodPh"></div>
+            <div class="field"><label data-i18n="sex">生理性別／醫療紀錄性別</label><input name="sex" data-ph="sexPh"></div>
+            <div class="field"><label data-i18n="height">身高</label><input name="height" data-ph="heightPh"></div>
+            <div class="field"><label data-i18n="weight">體重</label><input name="weight" data-ph="weightPh"></div>
+            <div class="field"><label data-i18n="phone">聯絡電話</label><input name="phone"></div>
+            <div class="field"><label data-i18n="emergency">緊急聯絡人</label><input name="emergency" data-ph="emergencyPh"></div>
+            <div class="field"><label data-i18n="emergencyPhone">緊急聯絡電話</label><input name="emergencyPhone"></div>
+            <div class="field full"><label data-i18n="address">居住地／常用語言補充</label><textarea name="address" data-ph="addressPh"></textarea></div>
+          </div>
+        </section>
+
+        <section class="card section" id="history">
+          <div class="card-head"><div><h2 data-i18n="historyTitle">疾病史與目前狀況</h2><p data-i18n="historyDesc">記錄曾被診斷的重要疾病、慢性病與目前症狀。</p></div></div>
+          <div class="grid">
+            <div class="field full"><label data-i18n="conditions">重要疾病／慢性病／診斷</label><textarea name="conditions" data-ph="conditionsPh"></textarea></div>
+            <div class="field"><label data-i18n="onset">首次診斷日期／大約年份</label><input name="onset"></div>
+            <div class="field"><label data-i18n="currentStatus">目前狀況</label><input name="currentStatus" data-ph="currentStatusPh"></div>
+            <div class="field full"><label data-i18n="hospital">曾就醫的醫院／科別／醫師（可選）</label><textarea name="hospital" data-ph="hospitalPh"></textarea></div>
+            <div class="field full"><label data-i18n="symptoms">目前重要症狀或就醫原因</label><textarea name="symptoms" data-ph="symptomsPh"></textarea></div>
+          </div>
+        </section>
+
+        <section class="card section" id="family">
+          <div class="card-head"><div><h2 data-i18n="familyTitle">家族史</h2><p data-i18n="familyDesc">記錄一等親或其他重要親屬的重大疾病。</p></div></div>
+          <div class="grid">
+            <div class="field full"><label data-i18n="familyConditions">家族重大疾病</label><textarea name="familyConditions" data-ph="familyPh"></textarea></div>
+            <div class="field"><label data-i18n="genetic">已知遺傳疾病／基因檢測</label><textarea name="genetic"></textarea></div>
+            <div class="field"><label data-i18n="familyNotes">其他家族健康資訊</label><textarea name="familyNotes"></textarea></div>
+          </div>
+        </section>
+
+        <section class="card section" id="surgery">
+          <div class="card-head"><div><h2 data-i18n="surgeryTitle">手術、住院與重要醫療處置</h2><p data-i18n="surgeryDesc">可用「年份－手術／處置－原因－結果」的格式逐項記錄。</p></div></div>
+          <div class="grid">
+            <div class="field full"><label data-i18n="surgeries">手術／住院紀錄</label><textarea name="surgeries" data-ph="surgeryPh"></textarea></div>
+            <div class="field"><label data-i18n="anesthesia">麻醉相關問題</label><textarea name="anesthesia"></textarea></div>
+            <div class="field"><label data-i18n="transfusion">輸血／重大醫療反應</label><textarea name="transfusion"></textarea></div>
+          </div>
+        </section>
+
+        <section class="card section" id="meds">
+          <div class="card-head"><div><h2 data-i18n="medsTitle">用藥、過敏與不良反應</h2><p data-i18n="medsDesc">藥名最好寫通用名；若不確定，可附上藥袋或處方上的名稱。</p></div></div>
+          <div class="grid">
+            <div class="field full"><label data-i18n="medications">目前使用的藥物／保健品</label><textarea name="medications" data-ph="medsPh"></textarea></div>
+            <div class="field"><label data-i18n="allergies">藥物過敏</label><textarea name="allergies" data-ph="allergyPh"></textarea></div>
+            <div class="field"><label data-i18n="foodAllergy">食物／其他過敏</label><textarea name="foodAllergy"></textarea></div>
+            <div class="field full"><label data-i18n="reactions">曾發生的重要藥物不良反應</label><textarea name="reactions"></textarea></div>
+          </div>
+        </section>
+
+        <section class="card section" id="vaccine">
+          <div class="card-head"><div><h2 data-i18n="vaccineTitle">疫苗與預防保健</h2><p data-i18n="vaccineDesc">可記錄接種日期、疫苗名稱，以及重要篩檢資訊。</p></div></div>
+          <div class="grid">
+            <div class="field full"><label data-i18n="vaccines">疫苗紀錄</label><textarea name="vaccines" data-ph="vaccinePh"></textarea></div>
+            <div class="field"><label data-i18n="screening">重要篩檢／健檢</label><textarea name="screening"></textarea></div>
+            <div class="field"><label data-i18n="preventive">其他預防保健資訊</label><textarea name="preventive"></textarea></div>
+          </div>
+        </section>
+
+        <section class="card section" id="other">
+          <div class="card-head"><div><h2 data-i18n="otherTitle">其他重要資訊</h2><p data-i18n="otherDesc">把容易忘記、但在就醫時很有幫助的資訊集中在這裡。</p></div></div>
+          <div class="grid">
+            <div class="field full"><label data-i18n="devices">植入物／醫療器材</label><textarea name="devices" data-ph="devicesPh"></textarea></div>
+            <div class="field"><label data-i18n="mobility">特殊照護／溝通需求</label><textarea name="mobility"></textarea></div>
+            <div class="field"><label data-i18n="preferences">醫療溝通偏好／重要備註</label><textarea name="preferences"></textarea></div>
+            <div class="field full"><label data-i18n="otherNotes">其他你認為醫療人員應該知道的資訊</label><textarea name="otherNotes"></textarea></div>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button type="button" class="btn ghost" id="clearBtn" data-i18n="clear">清除本機資料</button>
+          <button type="button" class="btn ghost" id="exportBtn" data-i18n="export">匯出 JSON</button>
+          <button type="submit" class="btn primary" data-i18n="save">儲存紀錄</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const I18N = {
+"zh-TW":{
+brandSub:"隨身多國語言健康紀錄",print:"列印",offline:"OFFLINE · LOCAL",title:"我的隨身健康紀錄",
+subtitle:"把重要的個人史、疾病史、手術史、用藥與家族史集中整理，方便在就醫或旅行時快速提供醫療資訊。",
+privacy:"隱私提醒：本頁面是純前端靜態工具，資料只儲存在目前瀏覽器的 LocalStorage。請勿把它當成正式醫療系統或雲端備份；若裝置與帳號共用，請特別注意隱私。",
+navPersonal:"👤 個人資料",navHistory:"🩺 疾病史",navFamily:"👨‍👩‍👧 家族史",navSurgery:"🏥 手術／住院",navMeds:"💊 用藥／過敏",navVaccine:"💉 疫苗／預防",navOther:"📌 其他重要資訊",
+personalTitle:"個人資料",personalDesc:"建立一份容易交給醫療人員閱讀的基本資料。",name:"姓名",dob:"出生日期",blood:"血型",sex:"生理性別／醫療紀錄性別",height:"身高",weight:"體重",phone:"聯絡電話",emergency:"緊急聯絡人",emergencyPhone:"緊急聯絡電話",address:"居住地／常用語言補充",
+historyTitle:"疾病史與目前狀況",historyDesc:"記錄曾被診斷的重要疾病、慢性病與目前症狀。",conditions:"重要疾病／慢性病／診斷",onset:"首次診斷日期／大約年份",currentStatus:"目前狀況",hospital:"曾就醫的醫院／科別／醫師（可選）",symptoms:"目前重要症狀或就醫原因",
+familyTitle:"家族史",familyDesc:"記錄一等親或其他重要親屬的重大疾病。",familyConditions:"家族重大疾病",genetic:"已知遺傳疾病／基因檢測",familyNotes:"其他家族健康資訊",
+surgeryTitle:"手術、住院與重要醫療處置",surgeryDesc:"可用「年份－手術／處置－原因－結果」的格式逐項記錄。",surgeries:"手術／住院紀錄",anesthesia:"麻醉相關問題",transfusion:"輸血／重大醫療反應",
+medsTitle:"用藥、過敏與不良反應",medsDesc:"藥名最好寫通用名；若不確定，可附上藥袋或處方上的名稱。",medications:"目前使用的藥物／保健品",allergies:"藥物過敏",foodAllergy:"食物／其他過敏",reactions:"曾發生的重要藥物不良反應",
+vaccineTitle:"疫苗與預防保健",vaccineDesc:"可記錄接種日期、疫苗名稱，以及重要篩檢資訊。",vaccines:"疫苗紀錄",screening:"重要篩檢／健檢",preventive:"其他預防保健資訊",
+otherTitle:"其他重要資訊",otherDesc:"把容易忘記、但在就醫時很有幫助的資訊集中在這裡。",devices:"植入物／醫療器材",mobility:"特殊照護／溝通需求",preferences:"醫療溝通偏好／重要備註",otherNotes:"其他你認為醫療人員應該知道的資訊",
+clear:"清除本機資料",export:"匯出 JSON",save:"儲存紀錄",saved:"已儲存到此瀏覽器。",cleared:"本機紀錄已清除。",confirm:"確定要清除這個瀏覽器中的健康紀錄嗎？",namePh:"例如：王小明",bloodPh:"例如：A+",sexPh:"例如：Female / Male / Other",heightPh:"例如：165 cm",weightPh:"例如：55 kg",emergencyPh:"姓名＋關係",addressPh:"例如：居住地、慣用語言、翻譯需求",conditionsPh:"例如：氣喘（2018）、偏頭痛（2022）",currentStatusPh:"例如：穩定／治療中／追蹤中",hospitalPh:"年份、醫院、科別、醫師",symptomsPh:"例如：發燒、疼痛、咳嗽……",familyPh:"例如：父親－高血壓；祖母－糖尿病",surgeryPh:"例如：2021－闌尾切除－急性闌尾炎－恢復良好",medsPh:"藥名／劑量／頻率／開始時間",allergyPh:"藥名＋反應，例如：Penicillin－皮疹",vaccinePh:"疫苗名稱－日期／年份",devicesPh:"例如：眼鏡、助聽器、植入物等"
+},
+en:{
+brandSub:"Portable multilingual health record",print:"Print",offline:"OFFLINE · LOCAL",title:"My Portable Health Record",
+subtitle:"Keep essential personal, medical, surgical, medication, allergy, family, and preventive-care information together for visits or travel.",
+privacy:"Privacy note: this is a front-end static tool. Data is stored only in this browser's LocalStorage. It is not a formal medical record system or cloud backup; be careful when sharing a device or account.",
+navPersonal:"👤 Personal",navHistory:"🩺 Medical History",navFamily:"👨‍👩‍👧 Family History",navSurgery:"🏥 Surgery / Hospital",navMeds:"💊 Medications / Allergies",navVaccine:"💉 Vaccines / Prevention",navOther:"📌 Other Important Info",
+personalTitle:"Personal Information",personalDesc:"Basic information that is easy for a clinician to review.",name:"Full name",dob:"Date of birth",blood:"Blood type",sex:"Sex for medical records",height:"Height",weight:"Weight",phone:"Phone",emergency:"Emergency contact",emergencyPhone:"Emergency phone",address:"Location / language notes",
+historyTitle:"Medical History & Current Status",historyDesc:"Record important diagnoses, chronic conditions, and current symptoms.",conditions:"Major conditions / diagnoses",onset:"First diagnosis / approximate year",currentStatus:"Current status",hospital:"Hospitals / specialties / clinicians (optional)",symptoms:"Current important symptoms or reason for visit",
+familyTitle:"Family History",familyDesc:"Record significant conditions in close or other relevant relatives.",familyConditions:"Significant family conditions",genetic:"Known genetic conditions / testing",familyNotes:"Other family health information",
+surgeryTitle:"Surgery, Hospitalization & Procedures",surgeryDesc:"A useful format is “year – procedure – reason – outcome.”",surgeries:"Surgery / hospitalization history",anesthesia:"Anesthesia-related issues",transfusion:"Blood transfusion / major reactions",
+medsTitle:"Medications, Allergies & Reactions",medsDesc:"Use generic medication names when possible; you can copy names from a label or prescription.",medications:"Current medications / supplements",allergies:"Medication allergies",foodAllergy:"Food / other allergies",reactions:"Important medication adverse reactions",
+vaccineTitle:"Vaccines & Preventive Care",vaccineDesc:"Record vaccine names and dates plus important screening information.",vaccines:"Vaccination record",screening:"Important screening / checkups",preventive:"Other preventive-care information",
+otherTitle:"Other Important Information",otherDesc:"Capture details that are easy to forget but useful during medical care.",devices:"Implants / medical devices",mobility:"Special care / communication needs",preferences:"Communication preferences / important notes",otherNotes:"Anything else clinicians should know",
+clear:"Clear local data",export:"Export JSON",save:"Save record",saved:"Saved in this browser.",cleared:"Local record cleared.",confirm:"Clear the health record stored in this browser?",namePh:"e.g. Alex Chen",bloodPh:"e.g. A+",sexPh:"e.g. Female / Male / Other",heightPh:"e.g. 165 cm",weightPh:"e.g. 55 kg",emergencyPh:"Name + relationship",addressPh:"e.g. location, preferred language, interpreter needs",conditionsPh:"e.g. Asthma (2018), migraine (2022)",currentStatusPh:"e.g. Stable / under treatment / follow-up",hospitalPh:"Year, hospital, specialty, clinician",symptomsPh:"e.g. fever, pain, cough...",familyPh:"e.g. Father – hypertension; grandmother – diabetes",surgeryPh:"e.g. 2021 – appendectomy – appendicitis – recovered well",medsPh:"Medication / dose / frequency / start date",allergyPh:"Drug + reaction, e.g. penicillin – rash",vaccinePh:"Vaccine – date / year",devicesPh:"e.g. glasses, hearing aid, implant"
+},
+"ja":{
+brandSub:"多言語・携帯健康記録",print:"印刷",offline:"OFFLINE · LOCAL",title:"私の携帯健康記録",
+subtitle:"個人歴、病歴、手術歴、服薬・アレルギー、家族歴、予防情報をまとめ、受診や旅行時にすぐ提示できます。",
+privacy:"プライバシー：これはフロントエンドだけで動く静的ツールです。データはこのブラウザのLocalStorageにのみ保存され、正式な電子カルテやクラウドバックアップではありません。",
+navPersonal:"👤 個人情報",navHistory:"🩺 病歴",navFamily:"👨‍👩‍👧 家族歴",navSurgery:"🏥 手術・入院",navMeds:"💊 服薬・アレルギー",navVaccine:"💉 ワクチン・予防",navOther:"📌 その他",
+personalTitle:"個人情報",personalDesc:"医療者が確認しやすい基本情報です。",name:"氏名",dob:"生年月日",blood:"血液型",sex:"診療記録上の性別",height:"身長",weight:"体重",phone:"電話番号",emergency:"緊急連絡先",emergencyPhone:"緊急連絡先電話",address:"居住地・言語メモ",
+historyTitle:"病歴・現在の状態",historyDesc:"重要な診断、慢性疾患、現在の症状を記録します。",conditions:"主な疾患・診断",onset:"初回診断日・おおよその年",currentStatus:"現在の状態",hospital:"受診した病院・診療科・医師（任意）",symptoms:"現在の主な症状・受診理由",
+familyTitle:"家族歴",familyDesc:"近親者などの重要な疾患を記録します。",familyConditions:"家族の主な疾患",genetic:"遺伝性疾患・遺伝子検査",familyNotes:"その他の家族健康情報",
+surgeryTitle:"手術・入院・処置",surgeryDesc:"「年－処置－理由－結果」の形式で記録できます。",surgeries:"手術・入院歴",anesthesia:"麻酔に関する問題",transfusion:"輸血・重大な反応",
+medsTitle:"服薬・アレルギー・副作用",medsDesc:"可能なら一般名を記載し、薬袋や処方箋の名称をそのまま転記できます。",medications:"現在の薬・サプリメント",allergies:"薬剤アレルギー",foodAllergy:"食物・その他のアレルギー",reactions:"重要な薬剤副作用",
+vaccineTitle:"ワクチン・予防",vaccineDesc:"接種日・ワクチン名・重要な検査を記録します。",vaccines:"ワクチン歴",screening:"重要な検査・健診",preventive:"その他の予防情報",
+otherTitle:"その他の重要情報",otherDesc:"忘れやすいが診療に役立つ情報をまとめます。",devices:"インプラント・医療機器",mobility:"特別なケア・コミュニケーション",preferences:"医療コミュニケーションの希望・メモ",otherNotes:"医療者に伝えておきたいその他の情報",
+clear:"ローカルデータを削除",export:"JSONを書き出す",save:"保存",saved:"このブラウザに保存しました。",cleared:"ローカル記録を削除しました。",confirm:"このブラウザに保存された健康記録を削除しますか？",namePh:"例：山田太郎",bloodPh:"例：A+",sexPh:"例：女性 / 男性 / その他",heightPh:"例：165 cm",weightPh:"例：55 kg",emergencyPh:"氏名＋続柄",addressPh:"例：居住地、希望言語、通訳の必要性",conditionsPh:"例：喘息（2018）、片頭痛（2022）",currentStatusPh:"例：安定／治療中／経過観察",hospitalPh:"年、病院、診療科、医師",symptomsPh:"例：発熱、痛み、咳…",familyPh:"例：父－高血圧；祖母－糖尿病",surgeryPh:"例：2021－虫垂切除－虫垂炎－良好に回復",medsPh:"薬名／用量／頻度／開始日",allergyPh:"薬剤＋反応、例：ペニシリン－発疹",vaccinePh:"ワクチン名－日付／年",devicesPh:"例：眼鏡、補聴器、インプラント"
+},
+"ko":{
+brandSub:"휴대용 다국어 건강 기록",print:"인쇄",offline:"OFFLINE · LOCAL",title:"나의 휴대용 건강 기록",
+subtitle:"개인력, 질병력, 수술력, 복용약·알레르기, 가족력과 예방 정보를 한곳에 정리해 진료나 여행 때 활용하세요.",
+privacy:"개인정보 안내: 이 페이지는 프런트엔드 정적 도구이며 데이터는 현재 브라우저의 LocalStorage에만 저장됩니다. 공식 전자의무기록이나 클라우드 백업이 아닙니다.",
+navPersonal:"👤 개인 정보",navHistory:"🩺 병력",navFamily:"👨‍👩‍👧 가족력",navSurgery:"🏥 수술 / 입원",navMeds:"💊 약물 / 알레르기",navVaccine:"💉 예방접종",navOther:"📌 기타 중요 정보",
+personalTitle:"개인 정보",personalDesc:"의료진이 쉽게 확인할 수 있는 기본 정보입니다.",name:"이름",dob:"생년월일",blood:"혈액형",sex:"의료 기록상 성별",height:"키",weight:"체중",phone:"전화번호",emergency:"응급 연락처",emergencyPhone:"응급 연락처 전화",address:"거주지 / 언어 메모",
+historyTitle:"병력 및 현재 상태",historyDesc:"중요한 진단, 만성질환 및 현재 증상을 기록합니다.",conditions:"주요 질환 / 진단",onset:"최초 진단일 / 대략적인 연도",currentStatus:"현재 상태",hospital:"진료 병원 / 진료과 / 의료진(선택)",symptoms:"현재 주요 증상 / 진료 사유",
+familyTitle:"가족력",familyDesc:"가까운 가족의 중요한 질환을 기록합니다.",familyConditions:"가족의 주요 질환",genetic:"알려진 유전질환 / 유전자 검사",familyNotes:"기타 가족 건강 정보",
+surgeryTitle:"수술·입원·시술",surgeryDesc:"‘연도 – 시술 – 이유 – 결과’ 형식으로 기록할 수 있습니다.",surgeries:"수술 / 입원 기록",anesthesia:"마취 관련 문제",transfusion:"수혈 / 중대한 반응",
+medsTitle:"복용약·알레르기·이상반응",medsDesc:"가능하면 일반명을 적고 약 봉투나 처방전의 이름을 옮겨 적어도 됩니다.",medications:"현재 복용약 / 보충제",allergies:"약물 알레르기",foodAllergy:"음식 / 기타 알레르기",reactions:"중요한 약물 이상반응",
+vaccineTitle:"예방접종 및 예방관리",vaccineDesc:"접종 날짜와 백신명, 중요한 검사 정보를 기록합니다.",vaccines:"예방접종 기록",screening:"중요 검사 / 건강검진",preventive:"기타 예방관리 정보",
+otherTitle:"기타 중요 정보",otherDesc:"잊기 쉽지만 진료에 도움이 되는 정보를 모아둡니다.",devices:"삽입물 / 의료기기",mobility:"특별한 돌봄 / 의사소통 필요",preferences:"의료 의사소통 선호 / 메모",otherNotes:"의료진에게 알려야 할 기타 정보",
+clear:"로컬 데이터 삭제",export:"JSON 내보내기",save:"저장",saved:"이 브라우저에 저장했습니다.",cleared:"로컬 기록을 삭제했습니다.",confirm:"이 브라우저에 저장된 건강 기록을 삭제할까요?",namePh:"예: 홍길동",bloodPh:"예: A+",sexPh:"예: 여성 / 남성 / 기타",heightPh:"예: 165 cm",weightPh:"예: 55 kg",emergencyPh:"이름 + 관계",addressPh:"예: 거주지, 선호 언어, 통역 필요 여부",conditionsPh:"예: 천식(2018), 편두통(2022)",currentStatusPh:"예: 안정 / 치료 중 / 추적 관찰",hospitalPh:"연도, 병원, 진료과, 의료진",symptomsPh:"예: 발열, 통증, 기침...",familyPh:"예: 아버지 – 고혈압; 할머니 – 당뇨",surgeryPh:"예: 2021 – 충수절제술 – 충수염 – 회복 양호",medsPh:"약명 / 용량 / 횟수 / 시작일",allergyPh:"약물 + 반응, 예: 페니실린 – 발진",vaccinePh:"백신명 – 날짜 / 연도",devicesPh:"예: 안경, 보청기, 삽입물"
+},
+"vi":{
+brandSub:"Hồ sơ sức khỏe đa ngôn ngữ",print:"In",offline:"OFFLINE · LOCAL",title:"Hồ sơ sức khỏe cá nhân",
+subtitle:"Lưu thông tin cá nhân, bệnh sử, phẫu thuật, thuốc, dị ứng, tiền sử gia đình và tiêm chủng để dùng khi khám bệnh hoặc đi du lịch.",
+privacy:"Lưu ý riêng tư: đây là công cụ tĩnh chạy ở trình duyệt. Dữ liệu chỉ được lưu trong LocalStorage của trình duyệt này; không phải hồ sơ bệnh án chính thức hay bản sao lưu đám mây.",
+navPersonal:"👤 Cá nhân",navHistory:"🩺 Bệnh sử",navFamily:"👨‍👩‍👧 Tiền sử gia đình",navSurgery:"🏥 Phẫu thuật / Nhập viện",navMeds:"💊 Thuốc / Dị ứng",navVaccine:"💉 Vắc-xin / Phòng ngừa",navOther:"📌 Thông tin khác",
+personalTitle:"Thông tin cá nhân",personalDesc:"Thông tin cơ bản để nhân viên y tế dễ xem.",name:"Họ và tên",dob:"Ngày sinh",blood:"Nhóm máu",sex:"Giới tính dùng trong hồ sơ y tế",height:"Chiều cao",weight:"Cân nặng",phone:"Điện thoại",emergency:"Liên hệ khẩn cấp",emergencyPhone:"Điện thoại khẩn cấp",address:"Nơi ở / ghi chú ngôn ngữ",
+historyTitle:"Bệnh sử & tình trạng hiện tại",historyDesc:"Ghi các chẩn đoán quan trọng, bệnh mạn tính và triệu chứng hiện tại.",conditions:"Bệnh / chẩn đoán chính",onset:"Ngày / năm chẩn đoán đầu tiên",currentStatus:"Tình trạng hiện tại",hospital:"Bệnh viện / chuyên khoa / bác sĩ (tùy chọn)",symptoms:"Triệu chứng quan trọng / lý do khám",
+familyTitle:"Tiền sử gia đình",familyDesc:"Ghi các bệnh quan trọng ở người thân.",familyConditions:"Bệnh quan trọng trong gia đình",genetic:"Bệnh di truyền / xét nghiệm gen",familyNotes:"Thông tin sức khỏe gia đình khác",
+surgeryTitle:"Phẫu thuật, nhập viện & thủ thuật",surgeryDesc:"Có thể ghi theo “năm – thủ thuật – lý do – kết quả”.",surgeries:"Lịch sử phẫu thuật / nhập viện",anesthesia:"Vấn đề liên quan đến gây mê",transfusion:"Truyền máu / phản ứng nghiêm trọng",
+medsTitle:"Thuốc, dị ứng & phản ứng",medsDesc:"Nên ghi tên hoạt chất nếu có thể; có thể chép tên từ nhãn thuốc hoặc đơn.",medications:"Thuốc / thực phẩm bổ sung đang dùng",allergies:"Dị ứng thuốc",foodAllergy:"Dị ứng thực phẩm / khác",reactions:"Phản ứng bất lợi quan trọng với thuốc",
+vaccineTitle:"Vắc-xin & chăm sóc dự phòng",vaccineDesc:"Ghi tên và ngày tiêm chủng cùng các thông tin sàng lọc quan trọng.",vaccines:"Lịch sử tiêm chủng",screening:"Khám sức khỏe / sàng lọc quan trọng",preventive:"Thông tin phòng ngừa khác",
+otherTitle:"Thông tin quan trọng khác",otherDesc:"Ghi những điều dễ quên nhưng hữu ích khi chăm sóc y tế.",devices:"Thiết bị y tế / vật cấy ghép",mobility:"Nhu cầu chăm sóc / giao tiếp đặc biệt",preferences:"Ưu tiên giao tiếp y tế / ghi chú",otherNotes:"Thông tin khác nhân viên y tế cần biết",
+clear:"Xóa dữ liệu cục bộ",export:"Xuất JSON",save:"Lưu hồ sơ",saved:"Đã lưu trong trình duyệt này.",cleared:"Đã xóa hồ sơ cục bộ.",confirm:"Xóa hồ sơ sức khỏe được lưu trong trình duyệt này?",namePh:"Ví dụ: Nguyễn Văn A",bloodPh:"Ví dụ: A+",sexPh:"Ví dụ: Nữ / Nam / Khác",heightPh:"Ví dụ: 165 cm",weightPh:"Ví dụ: 55 kg",emergencyPh:"Tên + mối quan hệ",addressPh:"Ví dụ: nơi ở, ngôn ngữ, nhu cầu phiên dịch",conditionsPh:"Ví dụ: hen suyễn (2018), đau nửa đầu (2022)",currentStatusPh:"Ví dụ: ổn định / đang điều trị / theo dõi",hospitalPh:"Năm, bệnh viện, chuyên khoa, bác sĩ",symptomsPh:"Ví dụ: sốt, đau, ho...",familyPh:"Ví dụ: Cha – tăng huyết áp; bà – tiểu đường",surgeryPh:"Ví dụ: 2021 – cắt ruột thừa – viêm ruột thừa – hồi phục tốt",medsPh:"Tên thuốc / liều / tần suất / ngày bắt đầu",allergyPh:"Thuốc + phản ứng, ví dụ: penicillin – phát ban",vaccinePh:"Vắc-xin – ngày / năm",devicesPh:"Ví dụ: kính, máy trợ thính, vật cấy ghép"
+},
+"es":{
+brandSub:"Registro de salud multilingüe",print:"Imprimir",offline:"OFFLINE · LOCAL",title:"Mi registro de salud portátil",
+subtitle:"Organiza antecedentes personales, médicos, quirúrgicos, medicamentos, alergias, familiares y vacunas para consultas o viajes.",
+privacy:"Privacidad: esta es una herramienta estática de navegador. Los datos se guardan solo en el LocalStorage de este navegador; no es una historia clínica oficial ni una copia en la nube.",
+navPersonal:"👤 Datos personales",navHistory:"🩺 Antecedentes",navFamily:"👨‍👩‍👧 Antecedentes familiares",navSurgery:"🏥 Cirugía / Hospitalización",navMeds:"💊 Medicamentos / Alergias",navVaccine:"💉 Vacunas / Prevención",navOther:"📌 Otra información",
+personalTitle:"Datos personales",personalDesc:"Información básica fácil de revisar por el personal sanitario.",name:"Nombre completo",dob:"Fecha de nacimiento",blood:"Grupo sanguíneo",sex:"Sexo en el registro médico",height:"Estatura",weight:"Peso",phone:"Teléfono",emergency:"Contacto de emergencia",emergencyPhone:"Teléfono de emergencia",address:"Ubicación / notas de idioma",
+historyTitle:"Antecedentes médicos y estado actual",historyDesc:"Registra diagnósticos importantes, enfermedades crónicas y síntomas actuales.",conditions:"Enfermedades / diagnósticos principales",onset:"Primera fecha / año aproximado del diagnóstico",currentStatus:"Estado actual",hospital:"Hospitales / especialidades / profesionales (opcional)",symptoms:"Síntomas importantes / motivo de consulta",
+familyTitle:"Antecedentes familiares",familyDesc:"Registra enfermedades relevantes de familiares cercanos.",familyConditions:"Enfermedades familiares importantes",genetic:"Enfermedades genéticas / pruebas",familyNotes:"Otra información familiar",
+surgeryTitle:"Cirugías, hospitalizaciones y procedimientos",surgeryDesc:"Puedes usar “año – procedimiento – motivo – resultado”.",surgeries:"Historial de cirugías / hospitalizaciones",anesthesia:"Problemas relacionados con anestesia",transfusion:"Transfusiones / reacciones importantes",
+medsTitle:"Medicamentos, alergias y reacciones",medsDesc:"Es preferible usar nombres genéricos cuando sea posible.",medications:"Medicamentos / suplementos actuales",allergies:"Alergias a medicamentos",foodAllergy:"Alergias alimentarias / otras",reactions:"Reacciones adversas importantes a medicamentos",
+vaccineTitle:"Vacunas y prevención",vaccineDesc:"Registra nombres y fechas de vacunas y pruebas importantes.",vaccines:"Registro de vacunas",screening:"Pruebas / revisiones importantes",preventive:"Otra información preventiva",
+otherTitle:"Otra información importante",otherDesc:"Incluye detalles fáciles de olvidar pero útiles durante la atención médica.",devices:"Implantes / dispositivos médicos",mobility:"Necesidades especiales de cuidado / comunicación",preferences:"Preferencias de comunicación / notas",otherNotes:"Otra información que el personal sanitario deba conocer",
+clear:"Borrar datos locales",export:"Exportar JSON",save:"Guardar",saved:"Guardado en este navegador.",cleared:"Registro local eliminado.",confirm:"¿Borrar el registro de salud guardado en este navegador?",namePh:"Ej.: Ana García",bloodPh:"Ej.: A+",sexPh:"Ej.: Mujer / Hombre / Otro",heightPh:"Ej.: 165 cm",weightPh:"Ej.: 55 kg",emergencyPh:"Nombre + relación",addressPh:"Ej.: ubicación, idioma preferido, necesidad de intérprete",conditionsPh:"Ej.: asma (2018), migraña (2022)",currentStatusPh:"Ej.: estable / en tratamiento / seguimiento",hospitalPh:"Año, hospital, especialidad, profesional",symptomsPh:"Ej.: fiebre, dolor, tos...",familyPh:"Ej.: padre – hipertensión; abuela – diabetes",surgeryPh:"Ej.: 2021 – apendicectomía – apendicitis – buena recuperación",medsPh:"Medicamento / dosis / frecuencia / inicio",allergyPh:"Medicamento + reacción, ej.: penicilina – erupción",vaccinePh:"Vacuna – fecha / año",devicesPh:"Ej.: gafas, audífono, implante"
+},
+"fr":{
+brandSub:"Dossier de santé multilingue",print:"Imprimer",offline:"OFFLINE · LOCAL",title:"Mon dossier de santé portable",
+subtitle:"Regroupez antécédents personnels, médicaux, chirurgicaux, traitements, allergies, antécédents familiaux et vaccins.",
+privacy:"Confidentialité : outil statique côté navigateur. Les données sont conservées uniquement dans le LocalStorage de ce navigateur. Ce n’est pas un dossier médical officiel ni une sauvegarde cloud.",
+navPersonal:"👤 Personnel",navHistory:"🩺 Antécédents",navFamily:"👨‍👩‍👧 Antécédents familiaux",navSurgery:"🏥 Chirurgie / Hospitalisation",navMeds:"💊 Médicaments / Allergies",navVaccine:"💉 Vaccins / Prévention",navOther:"📌 Autres informations",
+personalTitle:"Informations personnelles",personalDesc:"Informations de base faciles à consulter par les professionnels de santé.",name:"Nom complet",dob:"Date de naissance",blood:"Groupe sanguin",sex:"Sexe dans le dossier médical",height:"Taille",weight:"Poids",phone:"Téléphone",emergency:"Contact d’urgence",emergencyPhone:"Téléphone d’urgence",address:"Lieu / notes linguistiques",
+historyTitle:"Antécédents médicaux et état actuel",historyDesc:"Notez les diagnostics importants, maladies chroniques et symptômes actuels.",conditions:"Maladies / diagnostics principaux",onset:"Premier diagnostic / année approximative",currentStatus:"État actuel",hospital:"Hôpitaux / spécialités / professionnels (facultatif)",symptoms:"Symptômes importants / motif de consultation",
+familyTitle:"Antécédents familiaux",familyDesc:"Notez les maladies importantes des proches.",familyConditions:"Maladies familiales importantes",genetic:"Maladies génétiques / tests",familyNotes:"Autres informations familiales",
+surgeryTitle:"Chirurgies, hospitalisations et actes",surgeryDesc:"Format conseillé : « année – acte – raison – résultat ».",surgeries:"Historique chirurgical / hospitalisations",anesthesia:"Problèmes liés à l’anesthésie",transfusion:"Transfusion / réactions importantes",
+medsTitle:"Médicaments, allergies et réactions",medsDesc:"Utilisez si possible les noms génériques.",medications:"Médicaments / compléments actuels",allergies:"Allergies médicamenteuses",foodAllergy:"Allergies alimentaires / autres",reactions:"Réactions indésirables importantes",
+vaccineTitle:"Vaccins et prévention",vaccineDesc:"Notez les noms et dates des vaccins ainsi que les dépistages importants.",vaccines:"Vaccinations",screening:"Dépistages / bilans importants",preventive:"Autres informations de prévention",
+otherTitle:"Autres informations importantes",otherDesc:"Ajoutez les détails faciles à oublier mais utiles aux soins.",devices:"Implants / dispositifs médicaux",mobility:"Besoins particuliers de soins / communication",preferences:"Préférences de communication / notes",otherNotes:"Autres informations à transmettre aux soignants",
+clear:"Effacer les données locales",export:"Exporter JSON",save:"Enregistrer",saved:"Enregistré dans ce navigateur.",cleared:"Dossier local effacé.",confirm:"Effacer le dossier de santé enregistré dans ce navigateur?",namePh:"Ex. : Alex Martin",bloodPh:"Ex. : A+",sexPh:"Ex. : Femme / Homme / Autre",heightPh:"Ex. : 165 cm",weightPh:"Ex. : 55 kg",emergencyPh:"Nom + relation",addressPh:"Ex. : lieu, langue préférée, besoin d’interprète",conditionsPh:"Ex. : asthme (2018), migraine (2022)",currentStatusPh:"Ex. : stable / traitement / suivi",hospitalPh:"Année, hôpital, spécialité, professionnel",symptomsPh:"Ex. : fièvre, douleur, toux...",familyPh:"Ex. : père – hypertension ; grand-mère – diabète",surgeryPh:"Ex. : 2021 – appendicectomie – appendicite – bonne récupération",medsPh:"Médicament / dose / fréquence / début",allergyPh:"Médicament + réaction, ex. pénicilline – éruption",vaccinePh:"Vaccin – date / année",devicesPh:"Ex. : lunettes, appareil auditif, implant"
+},
+"de":{
+brandSub:"Mehrsprachiger Gesundheitsausweis",print:"Drucken",offline:"OFFLINE · LOCAL",title:"Meine tragbare Gesundheitsakte",
+subtitle:"Persönliche Angaben, Krankengeschichte, Operationen, Medikamente, Allergien, Familiengeschichte und Impfungen an einem Ort.",
+privacy:"Datenschutz: Dies ist ein statisches Browser-Tool. Daten werden nur im LocalStorage dieses Browsers gespeichert. Es ist keine offizielle elektronische Patientenakte und kein Cloud-Backup.",
+navPersonal:"👤 Persönlich",navHistory:"🩺 Krankengeschichte",navFamily:"👨‍👩‍👧 Familiengeschichte",navSurgery:"🏥 OP / Krankenhaus",navMeds:"💊 Medikamente / Allergien",navVaccine:"💉 Impfungen / Vorsorge",navOther:"📌 Weitere Infos",
+personalTitle:"Persönliche Angaben",personalDesc:"Grunddaten, die medizinisches Personal schnell prüfen kann.",name:"Vollständiger Name",dob:"Geburtsdatum",blood:"Blutgruppe",sex:"Geschlecht im medizinischen Datensatz",height:"Größe",weight:"Gewicht",phone:"Telefon",emergency:"Notfallkontakt",emergencyPhone:"Telefon Notfallkontakt",address:"Wohnort / Sprachhinweise",
+historyTitle:"Krankengeschichte & aktueller Zustand",historyDesc:"Wichtige Diagnosen, chronische Erkrankungen und aktuelle Symptome.",conditions:"Wichtige Erkrankungen / Diagnosen",onset:"Erstdiagnose / ungefährer Jahrgang",currentStatus:"Aktueller Zustand",hospital:"Krankenhäuser / Fachgebiete / Behandelnde (optional)",symptoms:"Aktuelle wichtige Symptome / Grund des Besuchs",
+familyTitle:"Familiengeschichte",familyDesc:"Wichtige Erkrankungen naher Verwandter.",familyConditions:"Wichtige familiäre Erkrankungen",genetic:"Bekannte Erbkrankheiten / Gentests",familyNotes:"Weitere Informationen zur Familie",
+surgeryTitle:"Operationen, Krankenhausaufenthalte & Eingriffe",surgeryDesc:"Praktisches Format: „Jahr – Eingriff – Grund – Ergebnis“. ",surgeries:"OP- / Krankenhausgeschichte",anesthesia:"Probleme mit Narkose",transfusion:"Bluttransfusion / schwere Reaktionen",
+medsTitle:"Medikamente, Allergien & Reaktionen",medsDesc:"Wenn möglich, Wirkstoffnamen verwenden.",medications:"Aktuelle Medikamente / Nahrungsergänzung",allergies:"Medikamentenallergien",foodAllergy:"Lebensmittel- / andere Allergien",reactions:"Wichtige unerwünschte Arzneimittelwirkungen",
+vaccineTitle:"Impfungen & Vorsorge",vaccineDesc:"Impfstoffe und Daten sowie wichtige Untersuchungen dokumentieren.",vaccines:"Impfungen",screening:"Wichtige Vorsorge / Untersuchungen",preventive:"Weitere Vorsorgeinformationen",
+otherTitle:"Weitere wichtige Informationen",otherDesc:"Dinge, die man leicht vergisst, die medizinisch aber hilfreich sein können.",devices:"Implantate / medizinische Geräte",mobility:"Besondere Pflege- / Kommunikationsbedürfnisse",preferences:"Kommunikationswünsche / Notizen",otherNotes:"Weitere Informationen für medizinisches Personal",
+clear:"Lokale Daten löschen",export:"JSON exportieren",save:"Speichern",saved:"In diesem Browser gespeichert.",cleared:"Lokaler Datensatz gelöscht.",confirm:"Gesundheitsdatensatz aus diesem Browser löschen?",namePh:"z. B. Anna Müller",bloodPh:"z. B. A+",sexPh:"z. B. weiblich / männlich / divers",heightPh:"z. B. 165 cm",weightPh:"z. B. 55 kg",emergencyPh:"Name + Beziehung",addressPh:"z. B. Wohnort, bevorzugte Sprache, Dolmetscherbedarf",conditionsPh:"z. B. Asthma (2018), Migräne (2022)",currentStatusPh:"z. B. stabil / in Behandlung / Nachsorge",hospitalPh:"Jahr, Krankenhaus, Fachgebiet, Arzt",symptomsPh:"z. B. Fieber, Schmerzen, Husten...",familyPh:"z. B. Vater – Bluthochdruck; Großmutter – Diabetes",surgeryPh:"z. B. 2021 – Appendektomie – Blinddarmentzündung – gut erholt",medsPh:"Medikament / Dosis / Häufigkeit / Beginn",allergyPh:"Medikament + Reaktion, z. B. Penicillin – Ausschlag",vaccinePh:"Impfstoff – Datum / Jahr",devicesPh:"z. B. Brille, Hörgerät, Implantat"
+}
+};
+
+const STORAGE_KEY="medpocket-health-record-v1";
+const form=document.getElementById("recordForm");
+const language=document.getElementById("language");
+const toast=document.getElementById("toast");
+
+function t(key){
+  const lang=I18N[language.value]||I18N["en"];
+  return lang[key] ?? I18N["en"][key] ?? key;
+}
+function applyLanguage(){
+  const lang=language.value;
+  const dict=I18N[lang];
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const key=el.dataset.i18n;
+    if(dict[key]!==undefined) el.textContent=dict[key];
+  });
+  document.querySelectorAll("[data-ph]").forEach(el=>{
+    const key=el.dataset.ph;
+    el.placeholder=dict[key] ?? I18N.en[key] ?? "";
+  });
+  localStorage.setItem("medpocket-lang",lang);
+}
+function collect(){
+  const data={};
+  [...form.elements].forEach(el=>{ if(el.name) data[el.name]=el.value; });
+  return data;
+}
+function loadRecord(){
+  try{
+    const data=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if(!data) return;
+    Object.entries(data).forEach(([name,value])=>{
+      const el=form.elements[name]; if(el) el.value=value;
+    });
+  }catch(e){}
+}
+function showToast(msg){
+  toast.textContent=msg;toast.classList.add("show");
+  clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.remove("show"),2300);
+}
+function save(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(collect()));
+  showToast(t("saved"));
+}
+form.addEventListener("submit",e=>{e.preventDefault();save()});
+language.value=localStorage.getItem("medpocket-lang")||"zh-TW";
+language.addEventListener("change",applyLanguage);
+document.getElementById("printBtn").addEventListener("click",()=>window.print());
+document.getElementById("clearBtn").addEventListener("click",()=>{
+  if(confirm(t("confirm"))){localStorage.removeItem(STORAGE_KEY);form.reset();showToast(t("cleared"))}
+});
+document.getElementById("exportBtn").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify(collect(),null,2)],{type:"application/json;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="medpocket-health-record.json";a.click();URL.revokeObjectURL(a.href);
+});
+document.querySelectorAll("#nav button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll("#nav button").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.target).scrollIntoView({behavior:"smooth",block:"start"});
+  });
+});
+loadRecord();applyLanguage();
+</script>
+</body>
+</html>
